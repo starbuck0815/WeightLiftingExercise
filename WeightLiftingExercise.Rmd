@@ -4,6 +4,7 @@ author: "Holzmeister"
 date: "June 18, 2017"
 output:
   html_document: default
+  keep_md: true
   pdf_document: default
 ---
 

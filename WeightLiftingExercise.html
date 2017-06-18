@@ -150,13 +150,16 @@ download.file(url=fileURLTest, destfile=&quot;testing.csv&quot;, method=&quot;cu
 training &lt;- read.csv(&quot;./training.csv&quot;)
 testing &lt;- read.csv(&quot;./testing.csv&quot;)</code></pre>
 </div>
-<div id="data-exploration" class="section level3">
-<h3>Data exploration</h3>
+<div id="data-exploration-and-preprocessing" class="section level3">
+<h3>Data exploration and preprocessing</h3>
 <p>The type of execution is stored in the <em>classe</em> column of the training set. A brief comparison of column names identifies this as the only column which differs between the training and testing dataset.</p>
 <pre class="r"><code>coldiff&lt;-which(names(training)!=names(testing))
 names(training)[coldiff]; names(testing)[coldiff]</code></pre>
 <pre><code>## [1] &quot;classe&quot;</code></pre>
 <pre><code>## [1] &quot;problem_id&quot;</code></pre>
+</div>
+<div id="removal-of-unused-columns" class="section level3">
+<h3>Removal of unused columns</h3>
 <p>A glimpse at the testing data frame revealed that many observations are <em>NA</em> for all 20 cases to be tested. These are the columns containing aggregated data of each sensor (names starting with max, min, …), which in the training set is provided for various <em>time windows</em> in rows with <span class="math inline">\(new_window=yes\)</span>. For example, we look at the number of <em>NA/NULL/empty</em> values for all values related to the belt sensor:</p>
 <pre class="r"><code>dim(training)</code></pre>
 <pre><code>## [1] 19622   160</code></pre>
@@ -200,6 +203,9 @@ trClean&lt;-trClean[,-(1:7)]
 paste(&quot;reduced colums: &quot;, dim(trClean)[2], &quot;||remaining NA in data frame: &quot;, sum(is.na(trClean)))</code></pre>
 <pre><code>## [1] &quot;reduced colums:  53 ||remaining NA in data frame:  0&quot;</code></pre>
 <p>Now, we are left with 53 columns, consisting of 13 measured features for each of the 4 sensors, plus the classification label in column <em>classe</em>.</p>
+</div>
+<div id="removal-of-highly-correlated-columns" class="section level3">
+<h3>Removal of highly correlated columns</h3>
 <p>Next we look at pairwise correlation between the remaining columns and remove those with absolute correlation &gt;0.75 to reduce both bias and lateron computation time.</p>
 <pre class="r"><code>corrMat&lt;-cor(trClean%&gt;%select(-classe))
 toDrop&lt;-findCorrelation(corrMat, cutoff = 0.75, verbose = FALSE, exact=TRUE)

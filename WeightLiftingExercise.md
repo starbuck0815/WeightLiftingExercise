@@ -49,7 +49,7 @@ training <- read.csv("./training.csv")
 testing <- read.csv("./testing.csv")
 ```
 
-### Data exploration
+### Data exploration and preprocessing
 
 The type of execution is stored in the *classe* column of the training set. A brief
 comparison of column names identifies this as the only column which differs
@@ -68,6 +68,8 @@ names(training)[coldiff]; names(testing)[coldiff]
 ```
 ## [1] "problem_id"
 ```
+
+### Removal of unused columns
 
 A glimpse at the testing data frame revealed that many observations are *NA* for all
 20 cases to be tested. These are the columns containing aggregated data of each sensor
@@ -150,6 +152,8 @@ paste("reduced colums: ", dim(trClean)[2], "||remaining NA in data frame: ", sum
 
 Now, we are left with 53 columns, consisting of 13 measured features for each of the 4 sensors, 
 plus the classification label in column *classe*.
+
+### Removal of highly correlated columns
 
 Next we look at pairwise correlation between the remaining columns and remove those with
 absolute correlation >0.75 to reduce both bias and lateron computation time.

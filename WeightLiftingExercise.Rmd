@@ -3,8 +3,8 @@ title: "Weight Lifting Exercise Classification"
 author: "Holzmeister"
 date: "June 18, 2017"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ### Synopsis
@@ -122,6 +122,7 @@ between the classes are not too extreme.
 The first try is a fairly simple classification tree from the *rpart* package. It's
 fast and gives a first idea of how complicated the task will end up being.
 We train the model with 10-fold crossvalidation, repeated 3 times.
+
 ```{r}
 set.seed(42)
 Control<-trainControl(method = "repeatedcv", number = 10, repeats = 3)
@@ -175,7 +176,9 @@ if(!file.exists("model2.rds")){
 }
 RFmodel2$final
 ```
+
 We plot both training results for comparison:
+
 ```{r Fig1_RandomForestTraining}
 p1<-ggplot(RFmodel)+theme_bw()+xlim(0, 32)+ylim(0.98, 1.00)+
         ggtitle("Random Forest initial training")
@@ -183,6 +186,7 @@ p2<-ggplot(RFmodel2)+theme_bw()+xlim(0, 32)+ylim(0.98, 1.00)+
         ggtitle("Random Forest optimization")
 grid.arrange(p1, p2, ncol=2)
 ```
+
 There is only some minor improvement, but it still is an improvement. Some additional
 things to check might be training with a different number of trees per forest, training
 with different seeds and comparison to other classifications methods. For our purpose
@@ -201,6 +205,7 @@ testClean<-testClean[,-toDrop]
 # remove the problem ID (replaces the classe column in the training set)
 testClean<-testClean%>%select(-c(problem_id))
 ```
+
 ### Prediction
 We predict with both random forest model and the first simple classification tree,
 then we compare the results.
@@ -217,7 +222,7 @@ Comparing both the first and the second random forest, we observe no difference
 in the predicted classes. The initial simple classification tree on the other hand,
 differed in 14 of 20 cases.
 
-The model we finally used, was the refined random forest model (RFmodel2). The results
+The model I finally used, was the refined random forest model (RFmodel2). The results
 gave 20/20 correct answers in the final quiz.
 
 
